@@ -29,9 +29,9 @@ resource "alicloud_vswitch" "vswitches" {
   count             = length(var.vswitch_cidrs)
   vpc_id            = var.vpc_id != "" ? var.vpc_id : alicloud_vpc.vpc[0].id
   cidr_block        = var.vswitch_cidrs[count.index]
-  availability_zone = var.availability_zones[count.index] != "" ? var.availability_zones[count.index] : lookup(data.alicloud_zones.default.zones[format("%d", length(data.alicloud_zones.default.zones) < 2 ? 0 : count.index%length(data.alicloud_zones.default.zones))], "id")
-  name              = length(var.vswitch_cidrs) < 2 ? var.vswitch_name : format("%s_%s", var.vswitch_name, format(var.number_format, count.index+1))
-  description       = length(var.vswitch_cidrs) < 2 ? var.vswitch_description : format("%s This is NO.%s", var.vswitch_description, format(var.number_format, count.index+1))
+  availability_zone = var.availability_zones[count.index] != "" ? var.availability_zones[count.index] : lookup(data.alicloud_zones.default.zones[format("%d", length(data.alicloud_zones.default.zones) < 2 ? 0 : count.index % length(data.alicloud_zones.default.zones))], "id")
+  name              = var.availability_zones[count.index] != "" ? var.availability_zones[count.index] : lookup(data.alicloud_zones.default.zones[format("%d", length(data.alicloud_zones.default.zones) < 2 ? 0 : count.index % length(data.alicloud_zones.default.zones))], "id")
+  description       = var.vswitch_description
 }
 
 // According to the destination cidr block to launch a new route entry
